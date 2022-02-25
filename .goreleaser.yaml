@@ -1,0 +1,106 @@
+# This is an example .goreleaser.yml file with some sensible defaults.
+# Make sure to check the documentation at https://goreleaser.com
+project_name: simwigo
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod tidy
+    # you may remove this if you don't need go generate
+    - go generate ./...
+builds:
+  - id: "simwigo"
+    binary: simwigo
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    ldflags:
+      - -s -w
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    goarm:
+      - "6"
+      - "7"
+
+archives:
+  -
+    id: "simwigo"
+    builds: [ 'simwigo' ]
+    replacements:
+      darwin: MacOS
+      linux: Linux
+      windows: Windows
+      amd64: x86_64
+      arm: ARM
+      arm64: ARM64
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Version }}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+nfpms:
+  -
+    # ID of the nfpm config, must be unique.
+    # Defaults to "default".
+    id: simwigo
+
+    # You can change the file name of the package.
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+
+    # Replacements for GOOS and GOARCH in the package name.
+    # Keys should be valid GOOSs or GOARCHs.
+    # Values are the respective replacements.
+    # Default is empty.
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+      arm: ARM
+      arm64: ARM64
+
+    # Your app's vendor.
+    # Default is empty.
+    vendor: 8iche
+
+    # Template to your app's homepage.
+    # Default is empty.
+    homepage: https://github.com/8iche/simwigo
+
+    # Your app's maintainer (probably you).
+    # Default is empty.
+    maintainer: Anis Boubekri <a.boubekri@protonmail.com>
+
+    # Template to your app's description.
+    # Default is empty.
+    description: Tool to easily deploy a web server.
+
+    # Formats to be generated.
+    formats:
+      - deb
+      - rpm
+#    rpm:
+#      signature:
+#        key_file: "{{ .Env.CI_SIGNING_KEY }}"
+#    deb:
+#      signature:
+#        key_file: "{{ .Env.CI_SIGNING_KEY }}"
+
+release:
+  github:
+  disable: false
