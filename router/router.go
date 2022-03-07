@@ -3,11 +3,12 @@ package router
 import (
 	"errors"
 	"fmt"
+	"net/http"
+	"simwigo/logger"
+
 	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/acme/autocert"
-	"net/http"
-	"simwigo/logger"
 )
 
 func (server *Server) Run() error {
