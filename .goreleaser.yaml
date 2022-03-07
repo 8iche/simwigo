@@ -16,8 +16,10 @@ builds:
       - linux
       - windows
       - darwin
+    flags:
+      - -trimpath
     ldflags:
-      - -s -w
+      - -s -w -X main.version={{.Version}}
     goarch:
       - amd64
       - arm
