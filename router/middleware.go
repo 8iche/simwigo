@@ -8,19 +8,11 @@ import (
 func mainHandler(whiteList []string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if len(whiteList) > 0 {
-			if contains(whiteList, c.ClientIP()) {
-				c.Next()
-				if c.FullPath() == "/print" {
-					req := formatHttpRequest(c.Request)
-					logger.RequestPrinter(strHttpRequest(req))
-				}
+			if !contains(whiteList, c.ClientIP()) {
+				logger.Warning.Logfln("Request from %s rejected", c.ClientIP())
+				c.AbortWithStatus(400)
 				return
 			}
-
-			logger.Warning.Logfln("Request from %s rejected", c.ClientIP())
-			c.AbortWithStatus(400)
-			return
-
 		}
 
 		c.Next()
