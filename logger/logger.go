@@ -84,6 +84,13 @@ func (logger *Logger) LogFatalln(v ...interface{}) {
 	}
 }
 
+func Logfln(s string, v ...interface{}) {
+	if Debug {
+		pterm.Printfln(s, v...)
+	}
+
+}
+
 func Logln(v ...interface{}) {
 	if Debug {
 		pterm.Println(v...)
