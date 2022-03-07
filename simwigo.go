@@ -14,6 +14,8 @@ import (
 
 const goos = runtime.GOOS
 
+var version string
+
 var opts struct {
 	AutoTLS   bool   `long:"autotls" description:"Enable TLS using Let's Encrypt"`
 	SelfTLS   bool   `long:"self-cert" description:"Auto generates self-signed TLS certificates (dangerous)"`
@@ -30,9 +32,11 @@ var opts struct {
 	DirList   string `long:"dir" description:"Enable directory listing (dangerous)"`
 	Domain    string `long:"domain" short:"d" description:"Domain to specify for Let's Encrypt"`
 	WhiteList string `long:"white-list" short:"l" description:"White list IP separated by comma (,)"`
+	Version   bool   `long:"version" description:"Show version"`
 }
 
 func main() {
+
 
 	parser := flags.NewParser(&opts, flags.Default)
 
@@ -42,6 +46,10 @@ func main() {
 		os.Exit(0)
 	}
 
+	if opts.Version {
+		logger.Logfln("simwigo v%s", version)
+		os.Exit(0)
+	}
 	if opts.Debug {
 		logger.DisableColor()
 		logger.Debug = false
