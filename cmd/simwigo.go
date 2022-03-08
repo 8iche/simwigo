@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/user"
 	"runtime"
-	"simwigo/logger"
+	logger2 "simwigo/internal/logger"
 	"simwigo/router"
 	"strings"
 )
@@ -37,7 +37,6 @@ var opts struct {
 
 func main() {
 
-
 	parser := flags.NewParser(&opts, flags.Default)
 
 	_, err := parser.Parse()
@@ -47,16 +46,16 @@ func main() {
 	}
 
 	if opts.Version {
-		logger.Logfln("simwigo v%s", version)
+		logger2.Logfln("simwigo v%s", version)
 		os.Exit(0)
 	}
 	if opts.Debug {
-		logger.DisableColor()
-		logger.Debug = false
+		logger2.DisableColor()
+		logger2.Debug = false
 	}
 
 	if opts.Light {
-		logger.DisableColor()
+		logger2.DisableColor()
 	}
 
 	var whiteList []string
@@ -71,48 +70,48 @@ func main() {
 	err = createDir(opts.TempDir, opts.CacheDir)
 
 	if err != nil {
-		logger.Fatalln(err)
+		logger2.Fatalln(err)
 	}
 
 	if !opts.Debug {
-		logger.Banner()
+		logger2.Banner()
 	}
 
 	if !opts.EnableAPI {
-		logger.Warning.Logln("API authentication disabled. It is recommended to enable it!!!")
+		logger2.Warning.Logln("API authentication disabled. It is recommended to enable it!!!")
 	}
 
 	if opts.DirList != "" {
-		logger.Warning.Logln("Directory listing enabled (dangerous)")
+		logger2.Warning.Logln("Directory listing enabled (dangerous)")
 	}
 
 	if opts.AutoTLS {
 		if opts.Domain == "" {
-			logger.Fatalln("Domain should not be empty when autotls is enabled. Use -d option to specify a domain")
+			logger2.Fatalln("Domain should not be empty when autotls is enabled. Use -d option to specify a domain")
 		}
 		server.Port = 443
 	} else if opts.SelfTLS {
-		logger.Warning.Logln("Self-signed certificate generated (dangerous)")
-		logger.Logln()
+		logger2.Warning.Logln("Self-signed certificate generated (dangerous)")
+		logger2.Logln()
 	} else {
-		logger.Warning.Logln("TLS disabled (dangerous)")
-		logger.Logln()
+		logger2.Warning.Logln("TLS disabled (dangerous)")
+		logger2.Logln()
 	}
 
 	if err = server.Run(); err != nil {
-		logger.Fatalln(err)
+		logger2.Fatalln(err)
 	}
 }
 
 func checkConfig(whiteList []string) {
 	if opts.IP != "0.0.0.0" {
 		if _, err := netip.ParseAddr(opts.IP); err != nil {
-			logger.Error.LogFatalln(err)
+			logger2.Error.LogFatalln(err)
 		}
 	}
 
 	if opts.Port < 0 || opts.Port > 65535 {
-		logger.Error.LogFatalln("Invalid port")
+		logger2.Error.LogFatalln("Invalid port")
 	}
 
 	if opts.TempDir == "" {
@@ -120,7 +119,7 @@ func checkConfig(whiteList []string) {
 		case "windows":
 			u, err := user.Current()
 			if err != nil {
-				logger.Fatalln(err.Error())
+				logger2.Fatalln(err.Error())
 			}
 			opts.TempDir = fmt.Sprintf("%s\\AppData\\Local\\Temp\\simwigo\\", u.HomeDir)
 		case "linux":
@@ -137,7 +136,7 @@ func checkConfig(whiteList []string) {
 		case "windows":
 			u, err := user.Current()
 			if err != nil {
-				logger.Fatalln(err.Error())
+				logger2.Fatalln(err.Error())
 			}
 			opts.CacheDir = fmt.Sprintf("%s\\AppData\\Local\\Temp\\.simwigo\\", u.HomeDir)
 		case "linux":
@@ -151,7 +150,7 @@ func checkConfig(whiteList []string) {
 
 	for _, v := range whiteList {
 		if _, err := netip.ParseAddr(v); err != nil {
-			logger.Error.LogFatalln(err)
+			logger2.Error.LogFatalln(err)
 		}
 	}
 }
