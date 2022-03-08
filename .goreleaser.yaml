@@ -8,7 +8,8 @@ before:
     # you may remove this if you don't need go generate
     - go generate ./...
 builds:
-  - id: "simwigo"
+  - main: ./cmd/
+    id: "simwigo"
     binary: simwigo
     env:
       - CGO_ENABLED=0
