@@ -1,6 +1,6 @@
 ![](doc/logo.png)
 
-Simwigo is a cross-platform tool, written in Go, to simplify the deployment of a web service.
+# Simwigo : a cross-platform tool, written in Go, to simplify the deployment of a web service.
 
 It is easy to use and user-friendly. It also implements features to facilitate file exchange.
 
@@ -11,15 +11,17 @@ It implements simple security mechanisms to protect the exposure of the service,
 
 Moreover, for more security it is possible to use authentication by API tokens.
 
-# Functionalities
+## Functionalities
 
 * **/ping** : Ping the server to check if you can join him.
 * **/print** : Print details of incoming requests (interesting when exploiting an XXS for example).
 * **/file/upload** : To upload files.
 * **/file/download/{filename}** : To download files.
 * **/file/list** : List all available files.
+* **/share/upload** : Upload files and generates a random link without authentication.
+* **/share/{UUID}** : Download file from a random link without authentication.
 
-# Usage
+## Usage
 ```
 Usage:
   simwigo [OPTIONS]
@@ -40,13 +42,14 @@ Application Options:
       --dir=        Enable directory listing (dangerous)
   -d, --domain=     Domain to specify for Let's Encrypt
   -l, --white-list= White list IP separated by comma (,)
+      --version     Show version
 ```
 
-# Security
+## Security
 
 This tool was developed with security in mind, to keep the web server secure as possible.
 
-## TLS
+### TLS
 You can easily deploy a web server using TLS.
 
 Below are the rules to enable TLS :
@@ -55,10 +58,12 @@ Below are the rules to enable TLS :
 * By using `--self-cert` option. This will automatically generate self-signed certificates. Please use it only on a lab network (not safe).
 * By providing your own certificates.
 
-## API
+> Port 80 needs to be accessible for Let's Encrypt certificate validation/retrieval
+
+### API
 It is **highly recommended** to enable the `API` option. This feature will generate an API key that must be provided to access sensitive API routes.
 
-## White listing
+### White listing
 
 A white list system allows you to specify which IPs will be able to access the server and reject all requests from unknown IPs.
 
@@ -66,9 +71,9 @@ A white list system allows you to specify which IPs will be able to access the s
 simwigo --autotls --api --white-list 192.168.0.10,192.168.0.50,192.168.0.100
 ```
 
-# Examples
+## Examples
 
-## Upload file
+### Upload file
 
 ```shell
 curl https://127.0.0.1/file/upload -H "X-API-Key: XXXXXXXXXXXXXX" -F "file=@/tmp/test.txt"
@@ -80,43 +85,43 @@ $req.Headers.Add("X-API-Key", "XXXXXXXXXXXXXX")
 $req.UploadFile("https://127.0.0.1/file/upload", ".\Desktop\file.txt")
 ```
 
-## Download file
+### Download file
 
 ```shell
 curl https://127.0.0.1/file/download/test.txt -H "X-API-Key: XXXXXXXXXXXXXX"
 
 # Windows PowerShell
 
-Invoke-WebRequest 'https://127.0.0.1:8000/file/download/test.txt' -Headers @{"X-API-Key" = "lhztfbMjNk7TbncxUebt"}
+Invoke-WebRequest 'https://127.0.0.1:8000/file/download/test.txt' -Headers @{"X-API-Key" = "XXXXXXXXXXXXXX"}
 ```
-## Print incoming requests
+### Print incoming requests
 
 When `print` api route is accessed, it will prompt the details:
 
 ![](doc/print_request.png)
 
-# Cross Platform
+## Cross Platform
 
 Tested on Windows and Linux. But should also work on macOS.
 
-# Getting tarted
+## Getting started
 
 Precompiled binaries (Windows/Linux/macOS) are available on the [Release page](https://github.com/8iche/simwigo/releases).
 
-## Building
-### Linux
+### Building
+#### Linux
 
 ```GO
 go build -ldflags "-w -s" -o simwigo simwigo.go
 ```
 
-### Windows
+#### Windows
 
 ```GO
 GOOS=windows GOARCH=amd64 go build -ldflags "-w -s" -o simwigo simwigo.go
 ```
 
-# Todo
+## Todo
 
 - [X] Authentication using API Key
 - [X] Upload functionality
@@ -129,10 +134,10 @@ GOOS=windows GOARCH=amd64 go build -ldflags "-w -s" -o simwigo simwigo.go
 - [ ] Support configuration file
 - [ ] Support multi-user authentication
 
-# Features & Issues
+## Features & Issues
 
 Feel free to contact me by e-mail for improvement or addition of new features and for issues you encountered. 
 
-# Credits
+## Credits
 
 Anis Boubekri : a.boubekri@protonmail.com
