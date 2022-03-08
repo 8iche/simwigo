@@ -3,7 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"simwigo/api"
+	"simwigo/internal/api"
 )
 
 func validateAPIKey(api *api.API) gin.HandlerFunc {

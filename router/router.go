@@ -3,12 +3,11 @@ package router
 import (
 	"errors"
 	"fmt"
-	"net/http"
-	"simwigo/logger"
-
 	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/acme/autocert"
+	"net/http"
+	"simwigo/internal/logger"
 )
 
 func (server *Server) Run() error {
@@ -47,6 +46,12 @@ func (server *Server) setupRoutes() {
 		authRoutes.POST("upload", server.uploadFile)
 		authRoutes.GET("download/:filename", server.downloadFile)
 		authRoutes.GET("list", server.listFiles)
+	}
+
+	shareRoutes := server.Router.Group("/share")
+	{
+		shareRoutes.GET(":link", server.downloadLink)
+		shareRoutes.POST("upload", server.uploadAndShare).Use(validateAPIKey(server.API))
 	}
 }
 
@@ -103,6 +108,8 @@ func (server *Server) Info() {
 			{"ANY", "/print", "false"},
 			{"POST", "/file/upload", authStr},
 			{"GET", "/file/download/:filename", authStr},
+			{"POST", "/file/upload/link", authStr},
+			{"GET", "/link/:UUID", "false"},
 			{"GET", "/file/list", authStr},
 		},
 	}

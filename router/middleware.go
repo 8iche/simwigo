@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"simwigo/logger"
+	"simwigo/internal/logger"
 )
 
 func mainHandler(whiteList []string) gin.HandlerFunc {

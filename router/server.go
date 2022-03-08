@@ -2,9 +2,10 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"simwigo/api"
-	"simwigo/logger"
-	"simwigo/tls"
+	"simwigo/internal/api"
+	"simwigo/internal/logger"
+	"simwigo/internal/share"
+	"simwigo/internal/tls"
 )
 
 type Server struct {
@@ -18,6 +19,7 @@ type Server struct {
 	DirList   string
 	TLS       *TLS
 	WhiteList []string
+	Share     share.FS
 }
 
 type TLS struct {
@@ -60,5 +62,8 @@ func New(ip string, port int, domain string, tempDir string, cacheDir string, en
 	server.DirList = dirList
 	server.TLS.IsRSA = isRSA
 	server.WhiteList = whiteList
+
+	server.Share = make(share.FS)
+
 	return server
 }
