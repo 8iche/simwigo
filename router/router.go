@@ -52,6 +52,7 @@ func (server *Server) setupRoutes() {
 	{
 		shareRoutes.GET(":link", server.downloadLink)
 		shareRoutes.POST("upload", server.uploadAndShare).Use(validateAPIKey(server.API))
+		shareRoutes.GET(":link/delete", server.deleteShare).Use(validateAPIKey(server.API))
 	}
 }
 
@@ -108,9 +109,10 @@ func (server *Server) Info() {
 			{"ANY", "/print", "false"},
 			{"POST", "/file/upload", authStr},
 			{"GET", "/file/download/:filename", authStr},
-			{"POST", "/file/upload/link", authStr},
-			{"GET", "/link/:UUID", "false"},
 			{"GET", "/file/list", authStr},
+			{"POST", "/share/upload", authStr},
+			{"GET", "/share/:UUID", "false"},
+			{"GET", "/share/:UUID/delete", authStr},
 		},
 	}
 

@@ -65,6 +65,6 @@ func (server *Server) uploadAndShare(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"status": 200, "link": link})
 
-	logger.Info.Logfln("Share link was created at: %s", link)
+	logger.Info.Logfln("share link created: %s", link)
 
 }

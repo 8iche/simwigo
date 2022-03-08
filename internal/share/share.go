@@ -34,25 +34,25 @@ func (fs FS) GetMaxAccessCount(filename string) int {
 	return fs[filename].MaxAccessCount
 }
 
-func (fs FS) IsLinkInShare(link string) bool {
-	if err := isValidUUID(link); err != nil {
+func (fs FS) IsShareExist(uuid string) bool {
+	if err := isValidUUID(uuid); err != nil {
 		return false
 	}
 
 	for _, v := range fs {
-		if v.UUID == link {
+		if v.UUID == uuid {
 			return true
 		}
 	}
 	return false
 }
 
-func (fs FS) GetShareFromUUID(link string) (string, error) {
-	if err := isValidUUID(link); err != nil {
+func (fs FS) GetShareFromUUID(uuid string) (string, error) {
+	if err := isValidUUID(uuid); err != nil {
 		return "", err
 	}
 	for k, v := range fs {
-		if v.UUID == link {
+		if v.UUID == uuid {
 			return k, nil
 		}
 	}
@@ -80,14 +80,18 @@ func isValidUUID(link string) error {
 	return nil
 }
 
+func (fs FS) DeleteShare(filename string) {
+	delete(fs, filename)
+}
+
 func (fs FS) ProcessShare(filename string) (string, error) {
 	if v, ok := fs[filename]; ok {
 		if v.MaxAccessCount == 0 {
-			delete(fs, filename)
+			fs.DeleteShare(filename)
 			return "", errors.New("limit of access reached")
 		}
 
-		v.MaxAccessCount -= 1
+		v.MaxAccessCount--
 		fs[filename] = v
 		return v.FullPath, nil
 	}
