@@ -136,8 +136,4 @@ GOOS=windows GOARCH=amd64 go build -ldflags "-w -s" -o simwigo simwigo.go
 
 ## Features & Issues
 
-Feel free to contact me by e-mail for improvement or addition of new features and for issues you encountered. 
-
-## Credits
-
-Anis Boubekri : a.boubekri@protonmail.com
+Feel free to contact me for improvement or addition of new features and for issues you encountered. 
