@@ -80,7 +80,7 @@ curl https://127.0.0.1/file/upload -H "X-API-Key: XXXXXXXXXXXXXX" -F "file=@/tmp
 
 # Windows PowerShell
 
-req = New-Object System.Net.WebClient
+$req = New-Object System.Net.WebClient
 $req.Headers.Add("X-API-Key", "XXXXXXXXXXXXXX")
 $req.UploadFile("https://127.0.0.1/file/upload", ".\Desktop\file.txt")
 ```
